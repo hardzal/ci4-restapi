@@ -30,8 +30,13 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-// $routes->get('/', 'Home::index');
+$routes->get('/', 'Home::index');
 $routes->resource('mahasiswa');
+
+$routes->get('matakuliah_list', 'MataKuliah::index');
+$routes->get('matakuliah/(:segment)', 'MataKuliah::show/$1');
+$routes->post('matakuliah', 'MataKuliah::create');
+// $routes->resource('matakuliah');
 
 /**
  * --------------------------------------------------------------------
