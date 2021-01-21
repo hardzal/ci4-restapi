@@ -1,8 +1,9 @@
 <?php
+namespace App\Controllers;
 
-use app\Models\MahasiswaModel;
-use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
+use App\Models\MahasiswaModel;
 
 class Mahasiswa extends ResourceController {
     use ResponseTrait;
@@ -10,15 +11,37 @@ class Mahasiswa extends ResourceController {
     public function index() {
         $model = new MahasiswaModel();
         $data = $model->findAll();
-        return $this->respond($data, 200);
+        $respond = [
+            'status' => 200,
+            'error' => null,
+            'messages' => [
+                'success' => $model->countAllResults() . ' Data found!'
+            ],  
+            'data' => $data
+        ];
+
+        if(!$data) {
+            $respond['messages']['success'] = 'Data not found!';
+        }
+
+        return $this->respond($respond, 200);
     }
 
     public function show($id = null){ 
         $model = new MahasiswaModel();
         $data = $model->getWhere(['id' => $id])->getResult();
 
+        $respond = [
+            'status' => 200,
+            'error' => null,
+            'messages' => [
+                'success' => 'Data found!'
+            ],  
+            'data' => $data
+        ];
+        
         if($data) {
-            return $this->respond($data, 200);
+            return $this->respond($respond, 200);
         } 
         
         return $this->failNotFound('No data found with id '. $id);
